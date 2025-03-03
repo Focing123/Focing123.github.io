@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un cadeau pour toi</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #333;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        
+        .cadeau {
+            width: 150px;
+            height: 150px;
+            background-color: #e84393;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 2rem;
+        }
+        
+        .cadeau:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+        
+        .ruban-vertical {
+            position: absolute;
+            width: 20px;
+            height: 150px;
+            background-color: #fd79a8;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .ruban-horizontal {
+            position: absolute;
+            width: 150px;
+            height: 20px;
+            background-color: #fd79a8;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .noeud {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #fd79a8;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        
+        .tulipe-container {
+            display: none;
+            width: 300px;
+            height: 400px;
+        }
+        
+        .message-secret {
+            margin-top: 1rem;
+            font-style: italic;
+            color: #666;
+            display: none;
+        }
+        
+        footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        /* Animation des pétales */
+        @keyframes openPetal1 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-20deg) translate(-5px, -10px); }
+        }
+        
+        @keyframes openPetal2 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(20deg) translate(5px, -10px); }
+        }
+        
+        @keyframes openPetal3 {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        
+        .petale-gauche {
+            transform-origin: right bottom;
+            animation: openPetal1 1.5s ease forwards;
+            animation-delay: 1s;
+            animation-play-state: paused;
+        }
+        
+        .petale-droit {
+            transform-origin: left bottom;
+            animation: openPetal2 1.5s ease forwards;
+            animation-delay: 1s;
+            animation-play-state: paused;
+        }
+        
+        .petale-centre {
+            transform-origin: center bottom;
+            animation: openPetal3 1.5s ease forwards;
+            animation-delay: 1s;
+            animation-play-state: paused;
+        }
+        
+        .tulipe-ouverte .petale-gauche,
+        .tulipe-ouverte .petale-droit,
+        .tulipe-ouverte .petale-centre {
+            animation-play-state: running;
+        }
+    </style>
+</head>
+<body>
+    <h1>Un cadeau spécial pour toi</h1>
+    <p>Juste pour te dire à quel point tu es spéciale à mes yeux...</p>
+    
+    <div class="cadeau" id="cadeau">
+        <div class="ruban-vertical"></div>
+        <div class="ruban-horizontal"></div>
+        <div class="noeud"></div>
+    </div>
+    
+    <div class="tulipe-container" id="tulipe-container">
+        <svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg" id="tulipe-svg">
+            <!-- Tige -->
+            <path d="M100 300 L100 150" stroke="#2E8B57" stroke-width="4" fill="none"/>
+            
+            <!-- Feuille -->
+            <path d="M100 220 C120 200, 150 210, 140 240" stroke="#2E8B57" stroke-width="2" fill="#3CB371"/>
+            
+            <!-- Fleur (en trois pétales pour l'animation) -->
+            <g id="fleur">
+                <!-- Pétale gauche -->
+                <path class="petale-gauche" d="M100 150 C80 140, 60 100, 80 70 C85 55, 95 45, 100 40 L100 150 Z" fill="#E91E63"/>
+                
+                <!-- Pétale central -->
+                <path class="petale-centre" d="M90 150 L100 40 L110 150 Z" fill="#D81B60"/>
+                
+                <!-- Pétale droit -->
+                <path class="petale-droit" d="M100 150 C120 140, 140 100, 120 70 C115 55, 105 45, 100 40 L100 150 Z" fill="#E91E63"/>
+            </g>
+        </svg>
+    </div>
+    
+    <p class="message-secret" id="message-secret">Mais c'est toi la plus belle fleur de mon jardin. Je t'aime mon cœur.</p>
+    
+    <footer>Créé avec amour</footer>
+    
+    <script>
+        document.getElementById('cadeau').addEventListener('click', function() {
+            // Faire disparaître le cadeau
+            this.style.display = 'none';
+            
+            // Faire apparaître la tulipe
+            const tulipeContainer = document.getElementById('tulipe-container');
+            tulipeContainer.style.display = 'block';
+            
+            // Afficher le message secret
+            document.getElementById('message-secret').style.display = 'block';
+            
+            // Lancer l'animation des pétales après 1.5 secondes
+            setTimeout(function() {
+                document.getElementById('tulipe-svg').classList.add('tulipe-ouverte');
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
